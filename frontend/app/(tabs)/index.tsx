@@ -14,7 +14,7 @@ import { format, parseISO } from 'date-fns';
 import { calculateOverallStats } from '../services/calculator';
 
 export default function Dashboard() {
-  const { settings, subjects, classes, attendance, refreshData } = useData();
+  const { settings, subjects, classes, attendance, refreshData, markAttendance: markAttendanceContext } = useData();
   const { colors } = useTheme();
   const [refreshing, setRefreshing] = React.useState(false);
 
