@@ -89,7 +89,7 @@ export default function Analytics() {
                   <Text style={[styles.centerValue, { color: colors.text }]}>
                     {overallStats.percentage.toFixed(1)}%
                   </Text>
-                  <Text style={[styles.centerLabel Text, { color: colors.textSecondary }]}>
+                  <Text style={[styles.centerLabelText, { color: colors.textSecondary }]}>
                     Attendance
                   </Text>
                 </View>
