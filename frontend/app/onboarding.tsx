@@ -248,27 +248,36 @@ export default function Onboarding() {
   );
 
   return (
-    <ScrollView
-      style={[styles.container, { backgroundColor: colors.background }]}
-      contentContainerStyle={styles.contentContainer}
-    >
-      <View style={styles.progressContainer}>
-        {[1, 2, 3, 4].map(i => (
-          <View
-            key={i}
-            style={[
-              styles.progressDot,
-              { backgroundColor: i <= step ? colors.primary : colors.border },
-            ]}
-          />
-        ))}
-      </View>
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={{ flex: 1 }}
+      >
+        <ScrollView
+          style={[styles.container, { backgroundColor: colors.background }]}
+          contentContainerStyle={styles.contentContainer}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+        >
+          <View style={styles.progressContainer}>
+            {[1, 2, 3, 4].map(i => (
+              <View
+                key={i}
+                style={[
+                  styles.progressDot,
+                  { backgroundColor: i <= step ? colors.primary : colors.border },
+                ]}
+              />
+            ))}
+          </View>
 
-      {step === 1 && renderStep1()}
-      {step === 2 && renderStep2()}
-      {step === 3 && renderStep3()}
-      {step === 4 && renderStep4()}
-    </ScrollView>
+          {step === 1 && renderStep1()}
+          {step === 2 && renderStep2()}
+          {step === 3 && renderStep3()}
+          {step === 4 && renderStep4()}
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 }
 
