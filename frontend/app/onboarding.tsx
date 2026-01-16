@@ -3,10 +3,12 @@ import {
   View,
   Text,
   StyleSheet,
-  ScrollView,
   TouchableOpacity,
   TextInput,
   Platform,
+  KeyboardAvoidingView,
+  ScrollView,
+  Keyboard,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useData } from './contexts/DataContext';
@@ -14,6 +16,7 @@ import { useTheme } from './contexts/ThemeContext';
 import { Ionicons } from '@expo/vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { format } from 'date-fns';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Onboarding() {
   const router = useRouter();
