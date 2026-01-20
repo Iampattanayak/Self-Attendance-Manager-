@@ -269,6 +269,76 @@ export default function Settings() {
         </View>
       </View>
 
+      {/* Theme Settings */}
+      <View style={[styles.section, { backgroundColor: colors.surface }]}>
+        <Text style={[styles.sectionTitle, { color: colors.text }]}>Appearance</Text>
+
+        <View style={styles.themeContainer}>
+          <TouchableOpacity
+            style={[
+              styles.themeOption,
+              { borderColor: colors.border },
+              theme === 'light' && { backgroundColor: colors.primary, borderColor: colors.primary },
+            ]}
+            onPress={() => setTheme('light')}
+          >
+            <Ionicons 
+              name="sunny" 
+              size={24} 
+              color={theme === 'light' ? '#fff' : colors.text} 
+            />
+            <Text style={[
+              styles.themeText,
+              { color: theme === 'light' ? '#fff' : colors.text },
+            ]}>
+              Light
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[
+              styles.themeOption,
+              { borderColor: colors.border },
+              theme === 'dark' && { backgroundColor: colors.primary, borderColor: colors.primary },
+            ]}
+            onPress={() => setTheme('dark')}
+          >
+            <Ionicons 
+              name="moon" 
+              size={24} 
+              color={theme === 'dark' ? '#fff' : colors.text} 
+            />
+            <Text style={[
+              styles.themeText,
+              { color: theme === 'dark' ? '#fff' : colors.text },
+            ]}>
+              Dark
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[
+              styles.themeOption,
+              { borderColor: colors.border },
+              theme === 'auto' && { backgroundColor: colors.primary, borderColor: colors.primary },
+            ]}
+            onPress={() => setTheme('auto')}
+          >
+            <Ionicons 
+              name="phone-portrait-outline" 
+              size={24} 
+              color={theme === 'auto' ? '#fff' : colors.text} 
+            />
+            <Text style={[
+              styles.themeText,
+              { color: theme === 'auto' ? '#fff' : colors.text },
+            ]}>
+              Auto
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+
       {/* Backup & Restore */}
       <View style={[styles.section, { backgroundColor: colors.surface }]}>
         <Text style={[styles.sectionTitle, { color: colors.text }]}>Data Management</Text>
