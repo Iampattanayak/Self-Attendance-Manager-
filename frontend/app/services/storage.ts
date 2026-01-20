@@ -105,14 +105,34 @@ export const saveHolidays = async (holidays: Holiday[]): Promise<void> => {
   }
 };
 
+// Rescheduled Classes
+export const getRescheduledClasses = async (): Promise<RescheduledClass[]> => {
+  try {
+    const data = await AsyncStorage.getItem(KEYS.RESCHEDULED);
+    return data ? JSON.parse(data) : [];
+  } catch (error) {
+    console.error('Error getting rescheduled classes:', error);
+    return [];
+  }
+};
+
+export const saveRescheduledClasses = async (rescheduled: RescheduledClass[]): Promise<void> => {
+  try {
+    await AsyncStorage.setItem(KEYS.RESCHEDULED, JSON.stringify(rescheduled));
+  } catch (error) {
+    console.error('Error saving rescheduled classes:', error);
+  }
+};
+
 // Backup & Restore
 export const exportData = async (): Promise<string> => {
-  const [settings, subjects, classes, attendance, holidays] = await Promise.all([
+  const [settings, subjects, classes, attendance, holidays, rescheduled] = await Promise.all([
     getSettings(),
     getSubjects(),
     getClasses(),
     getAttendance(),
     getHolidays(),
+    getRescheduledClasses(),
   ]);
 
   return JSON.stringify({
@@ -121,6 +141,7 @@ export const exportData = async (): Promise<string> => {
     classes,
     attendance,
     holidays,
+    rescheduled,
     exportDate: new Date().toISOString(),
   }, null, 2);
 };
@@ -134,6 +155,7 @@ export const importData = async (jsonData: string): Promise<boolean> => {
     if (data.classes) await saveClasses(data.classes);
     if (data.attendance) await saveAttendance(data.attendance);
     if (data.holidays) await saveHolidays(data.holidays);
+    if (data.rescheduled) await saveRescheduledClasses(data.rescheduled);
     
     return true;
   } catch (error) {
