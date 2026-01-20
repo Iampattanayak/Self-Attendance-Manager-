@@ -48,13 +48,14 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const loadData = async () => {
     setLoading(true);
     try {
-      const [loadedSettings, loadedSubjects, loadedClasses, loadedAttendance, loadedHolidays] =
+      const [loadedSettings, loadedSubjects, loadedClasses, loadedAttendance, loadedHolidays, loadedRescheduled] =
         await Promise.all([
           Storage.getSettings(),
           Storage.getSubjects(),
           Storage.getClasses(),
           Storage.getAttendance(),
           Storage.getHolidays(),
+          Storage.getRescheduledClasses(),
         ]);
 
       setSettings(loadedSettings);
@@ -62,6 +63,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setClasses(loadedClasses);
       setAttendance(loadedAttendance);
       setHolidays(loadedHolidays);
+      setRescheduledClasses(loadedRescheduled);
     } catch (error) {
       console.error('Error loading data:', error);
     } finally {
