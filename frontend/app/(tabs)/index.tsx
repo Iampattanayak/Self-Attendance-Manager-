@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   View,
   Text,
@@ -7,19 +7,26 @@ import {
   TouchableOpacity,
   RefreshControl,
   useWindowDimensions,
+  Modal,
+  Alert,
+  Platform,
 } from 'react-native';
 import { useData } from '../contexts/DataContext';
 import { useTheme } from '../contexts/ThemeContext';
 import { Ionicons } from '@expo/vector-icons';
 import { format, parseISO } from 'date-fns';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { calculateOverallStats } from '../services/calculator';
 import { wp, hp, fp, getPadding, getCardGap } from '../utils/responsive';
 
 export default function Dashboard() {
-  const { settings, subjects, classes, attendance, refreshData, markAttendance: markAttendanceContext } = useData();
+  const { settings, subjects, classes, attendance, refreshData, markAttendance: markAttendanceContext, markDayAsHoliday } = useData();
   const { colors } = useTheme();
-  const [refreshing, setRefreshing] = React.useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   const dimensions = useWindowDimensions();
+  const [holidayModalVisible, setHolidayModalVisible] = useState(false);
+  const [selectedHolidayDate, setSelectedHolidayDate] = useState(new Date());
+  const [showDatePicker, setShowDatePicker] = useState(false);
 
   const onRefresh = async () => {
     setRefreshing(true);
