@@ -59,21 +59,43 @@ export default function Settings() {
     try {
       const jsonData = await exportData();
       const fileName = `attendance_backup_${format(new Date(), 'yyyy-MM-dd_HH-mm')}.json`;
-      const fileUri = FileSystem.documentDirectory + fileName;
-
-      await FileSystem.writeAsStringAsync(fileUri, jsonData);
-
-      if (await Sharing.isAvailableAsync()) {
-        await Sharing.shareAsync(fileUri, {
-          mimeType: 'application/json',
-          dialogTitle: 'Export Attendance Data',
-        });
+      
+      // Create a blob for web or use sharing for mobile
+      if (Platform.OS === 'web') {
+        // Web: Download file directly
+        const blob = new Blob([jsonData], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+        Alert.alert('Success', 'Data exported successfully!');
       } else {
-        Alert.alert('Success', `Data exported to ${fileName}`);
+        // Mobile: Use sharing
+        if (await Sharing.isAvailableAsync()) {
+          // Create a temporary file and share it
+          const data = `data:application/json;base64,${btoa(jsonData)}`;
+          await Sharing.shareAsync(data, {
+            mimeType: 'application/json',
+            dialogTitle: 'Export Attendance Data',
+            UTI: 'public.json',
+          });
+        } else {
+          Alert.alert('Export Data', jsonData, [
+            { text: 'Copy', onPress: () => {
+              // On mobile, show the data
+              Alert.alert('Success', 'Please copy the data manually');
+            }},
+            { text: 'OK' }
+          ]);
+        }
       }
     } catch (error) {
       console.error('Export error:', error);
-      Alert.alert('Error', 'Failed to export data');
+      Alert.alert('Error', 'Failed to export data. Please try again.');
     }
   };
 
