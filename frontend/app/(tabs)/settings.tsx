@@ -99,42 +99,33 @@ export default function Settings() {
     }
   };
 
-  const handleImportData = async () => {
-    try {
-      const result = await DocumentPicker.getDocumentAsync({
-        type: 'application/json',
-        copyToCacheDirectory: true,
-      });
-
-      if (result.canceled) return;
-
-      const fileUri = result.assets[0].uri;
-      const fileContent = await FileSystem.readAsStringAsync(fileUri);
-
-      Alert.alert(
-        'Import Data',
-        'This will replace all existing data. Are you sure?',
-        [
-          { text: 'Cancel', style: 'cancel' },
-          {
-            text: 'Import',
-            style: 'destructive',
-            onPress: async () => {
-              const success = await importData(fileContent);
+  const handleImportData = () => {
+    Alert.prompt(
+      'Import Data',
+      'Paste your backup JSON data:',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Import',
+          style: 'default',
+          onPress: async (text) => {
+            if (!text) return;
+            try {
+              const success = await importData(text);
               if (success) {
                 await refreshData();
                 Alert.alert('Success', 'Data imported successfully');
               } else {
-                Alert.alert('Error', 'Failed to import data. Invalid file format.');
+                Alert.alert('Error', 'Failed to import data. Invalid format.');
               }
-            },
+            } catch (error) {
+              Alert.alert('Error', 'Failed to import data. Invalid format.');
+            }
           },
-        ]
-      );
-    } catch (error) {
-      console.error('Import error:', error);
-      Alert.alert('Error', 'Failed to import data');
-    }
+        },
+      ],
+      'plain-text'
+    );
   };
 
   const handleClearAllData = () => {
